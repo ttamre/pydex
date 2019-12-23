@@ -1,7 +1,7 @@
 # Pydex
 Python pokedex application that uses the PokeAPI and the pokebase wrapper
 
-**Status:** In development/testing phase
+**Status:** Development, not stable
 
 
 ### Running pydex
