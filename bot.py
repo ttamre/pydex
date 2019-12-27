@@ -97,10 +97,10 @@ class Bot(discord.Client):
 
             name = pokemon["name"]
             ptype = client.parse_types(pokemon["types"])
-            height = pokemon["height"]
-            weight = pokemon["weight"]
+            height = pokemon["height"] / 10
+            weight = pokemon["weight"] / 10
 
-            output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight} units"
+            output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} metres tall with a weight of {weight}kg"
             return output
 
     def _author(self):
