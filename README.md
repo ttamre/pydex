@@ -1,5 +1,5 @@
 # Pydex
-Python pokedex application that uses the PokeAPI and the pokebase wrapper
+Pokedex discord bot that uses the PokeAPI and the Discord API
 
 **Status:** Development, not stable
 
