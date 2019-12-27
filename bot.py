@@ -100,7 +100,7 @@ class Bot(discord.Client):
             height = pokemon["height"]
             weight = pokemon["weight"]
 
-            output = f"**{name}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight} units".title()
+            output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight} units"
             return output
 
     def _author(self):
