@@ -1,62 +1,118 @@
-#!/usr/bin/env python3
-
 """
 pydex - a python pokedex application
 
-    Copyright (C) 2019 Tem Tamre
+Copyright (C) 2019 Tem Tamre
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-File:           pydex.py
-Description:    python pokedex application that uses the PokeAPI and the pokebase wrapper
+File:           bot.py
+Description:    Discord bot for Pydex
 
 Author:  Tem Tamre
 Contact: ttamre@ualberta.ca
 Version: 1.0
 """
 
-import backend
-from consolemenu import ConsoleMenu
-from consolemenu.items import FunctionItem, SubmenuItem
+import discord
+import logging
+import json
+from client import Pydex
+
+logging.basicConfig(level=logging.INFO)
+client = Pydex()
+
+with open("secrets.json") as f:
+    owners = json.load(f)["OWNERS"]
 
 
-def main():
-    '''
-    Create a GUI menu within the terminal to act as the main menu
-        1) Search pokemon       - Search for a pokemon, return relevant data
-        2) Search sprites       - Search for a pokemon and open their sprite
-        3) List generations     - List all pokemon from that generation
-        4) View search history  - View all searched pokemon
-        5) Exit program         - Exit program
-    '''
+class Bot(discord.Client):
 
-    main_menu = ConsoleMenu("POKEDEX: For all your pokemon-related inquiries")
+    async def on_ready(self):
+        print("-" * 24)
+        print("Logged in as {}\n".format(self.user))
+        print("A discord bot that allows users to search for pokemon")
+        print("Developed and maintained as a personal project by Tem Tamre (ttamre@ualberta.ca)")
+        print("Source code available at https://github.com/ttamre/pydex")
+        print("-" * 24)
+
+        await self.change_presence(status=discord.Status.online, activity=discord.Activity(name="$help for help"))
+
+    async def on_message(self, message):
+        """
+        Sends a message to the channel that a command was issued in
+        :param message:message  Command issued by a user
+        """
+        if message.author == self.user:
+            return
+
+        if message.content.startswith("$"):
+            input_message = message.content.split(" ")
+            logging.info("{user} said: {message}".format(user=message.author, message=message.content))
+
+            if "$pokemon" == input_message[0]:
+                output_message = self._pokemon(query=" ".join(input_message[1:]))
+                await message.channel.send(output_message)
+            
+            elif "$author" == input_message[0]:
+                await message.channel.send(self._author())
+            
+            elif "$help" == input_message[0]:
+                await message.channel.send(self._help())
+            
+            elif "$exit" == input_message[0]:
+                if str(message.author) in owners:
+                    await message.channel.send("`Logging off`")
+                    await self.logout()
+                else:
+                    output_message = "You do not have permission to use that command"
+            
+            else:
+                output_message = "Invalid command. For a list of commands, enter `$help`"
+            
+    def _pokemon(self, query):
+        cache_search = client.search_cache(query)
+        if cache_search:
+
+            name = cache_search["name"]
+            ptype = client.parse_types(cache_search["types"])
+            height = cache_search["height"]
+            weight = cache_search["weight"]
+
+            output = f"**{name}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
+            return output
+        else:
+            pokemon = client.search_pokemon(query)
+
+            name = pokemon["name"]
+            ptype = client.parse_types(pokemon["types"])
+            height = pokemon["height"]
+            weight = pokemon["weight"]
+
+            output = f"**{name}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
+            return output
+
+    def _author(self):
+        author = "**Author:** Tem Tamre\n"
+        contact = "**Contact:** ttamre@ualberta.ca\n"
+        github = "**Github:** https://www.github.com/ttamre"
+        return author + contact + github
+
+    def _help(self):
+        pokemon = "To search for a pokemon, enter `$pokemon pokemon_name`\n"
+        author = "To view author contact info, enter `$author`\n"
+        exit_ = "To log the bot off, enter `$exit` (only owners of this bot can execute this command, contact the server owner or tei#0397 for assistance)"
+        return pokemon + author + exit_
+
     
-    search_pokemon = FunctionItem("Search for a pokemon", backend.search_pokemon)
-    search_spirits = FunctionItem("Search for a pokemon spirit", backend.search_sprites)
-    list_gens = FunctionItem("List all pokemon from a given generation", backend.list_generations)
-    view_history = FunctionItem("View your search history", backend.view_history)
-    exit_program = FunctionItem("Exit program", exit(0))
-
-    main_menu.append_item(search_pokemon)
-    main_menu.append_item(search_spirits)
-    main_menu.append_item(list_gens)
-    main_menu.append_item(view_history)
-    main_menu.append_item(exit_program)
-
-    main_menu.show()
-
-
-main()
