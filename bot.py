@@ -80,6 +80,9 @@ class Bot(discord.Client):
                 output_message = "Invalid command. For a list of commands, enter `$help`"
             
     def _pokemon(self, query):
+        if query == "god":
+            return client.god()
+
         pokemon = client.search_cache(query)
         if not pokemon:
             pokemon = client.search_pokemon(query)
