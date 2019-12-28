@@ -88,7 +88,7 @@ class Bot(discord.Client):
             height = cache_search["height"]
             weight = cache_search["weight"]
 
-            output = f"**{name}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
+            output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
             return output
         else:
             pokemon = client.search_pokemon(query)
