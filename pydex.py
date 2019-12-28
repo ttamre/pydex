@@ -40,6 +40,6 @@ if __name__ == "__main__":
     
     if token:
         bot = Bot()
-        bot.run()
+        bot.run(token)
     else:
         logging.critical("Bot token not found")
