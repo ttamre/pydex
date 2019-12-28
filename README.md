@@ -1,26 +1,17 @@
 # Pydex
-Pokedex discord bot that uses the PokeAPI and the Discord API
+Pokedex discord bot that uses the PokeAPI and the Discord API, hosted in Heroku
 
-**Status:** Development, not stable
-
-
-### Running pydex
-Execute the file as you would any other python file, depending on the default version of python you have installed.
-```
-$ python pydex.py            # If you have python3 installed and it is default
-$ python3 pydex.py           # If you have python3 installed and it is not default
-```
-
-To check your default python version, run the following command
-```
-$ python --version
-```
 
 ## Installing
 Simply clone the repository into a location of your choosing
 ```
 $ git clone https://github.com/ttamre/pydex.git
 ```
+
+## Running pydex locally
+1. Create a discord bot in the discord developer API
+2. Export the bot token to an environment variable called `PYDEX_BOT_TOKEN`
+3. Run `python pydex.py` in your terminal (or `python3 pydex.py` if your default python version is 2.x)
 
 ## Contributing
 

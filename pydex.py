@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import json
 import logging
+import os
 from bot import Bot
 
 
@@ -34,9 +35,11 @@ pydex Copyright (C) 2019 Tem Tamre
 """
 
 if __name__ == "__main__":
-    with open("secrets.json") as f:
-        token = json.load(f)["DISCORD_BOT_TOKEN"]
-    
     logging.info(license_text)
-    bot = Bot()
-    bot.run(token)
+    token = os.environ.get("PYDEX_BOT_TOKEN")
+    
+    if token:
+        bot = Bot()
+        bot.run()
+    else:
+        logging.critical("Bot token not found")

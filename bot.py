@@ -32,9 +32,7 @@ from client import Pydex
 
 logging.basicConfig(level=logging.INFO)
 client = Pydex()
-
-with open("secrets.json") as f:
-    owners = json.load(f)["OWNERS"]
+owners = ["tei#0397"]
 
 
 class Bot(discord.Client):
