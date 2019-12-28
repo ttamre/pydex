@@ -91,7 +91,7 @@ class Bot(discord.Client):
         
         images = client.fetch_images(pokemon.get("sprites"))
         if images:
-            images = [discord.File(fp=f, filename=f"{f.name}.png") for f in images]
+            images = [discord.File(fp=f[1], filename=f"file{f[0]+1}.png") for f in enumerate(images)]
 
         output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
         return (output, images)
