@@ -81,7 +81,7 @@ class Bot(discord.Client):
             
     def _pokemon(self, query):
         if query == "god":
-            return client.god()
+            return ("", [discord.File(fp=client.god(), filename="god.jpg")])
 
         pokemon = client.search_cache(query)
         if not pokemon:

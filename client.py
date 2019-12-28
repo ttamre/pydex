@@ -77,4 +77,4 @@ class Pydex:
     def god(self):
         response = requests.get("https://pbs.twimg.com/media/EEuV-M8XYAACOWS?format=jpg&name=medium")
         god_bytes = BytesIO(response.content)
-        return ("", god_bytes)
+        return god_bytes
