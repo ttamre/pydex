@@ -56,7 +56,7 @@ class Bot(discord.Client):
             return
 
         if message.content.startswith("$"):
-            input_message = message.content.split(" ")
+            input_message = message.content.lower().split(" ")
             logging.info("{user} said: {message}".format(user=message.author, message=message.content))
 
             if "$pokemon" == input_message[0]:
