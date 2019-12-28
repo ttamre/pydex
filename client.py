@@ -37,6 +37,9 @@ class Pydex:
         self.host = "https://pokeapi.co/api/v2/pokemon/"
         self.cache = {}
 
+    def search_cache(self, query):
+        return self.cache.get(query, None)
+
     def search_pokemon(self, query):
         url = self.host + query + '/'
         result = requests.get(url)
@@ -48,7 +51,7 @@ class Pydex:
 
             return result
         
-        raise requests.HTTPError(f"HTTP response code {result.status_code}")
+        raise requests.HTTPError(f"HTTP {result.status_code} response on search for {query}")
 
     def parse_types(self, ptype):
         if len(ptype) == 1:
@@ -58,6 +61,3 @@ class Pydex:
         else:
             logging.error(f"(Ignore in workflow build) Parsing error on type {json.dumps(ptype)}")
             return None
-
-    def search_cache(self, query):
-        return self.cache.get(query, None)

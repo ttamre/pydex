@@ -60,8 +60,8 @@ class Bot(discord.Client):
             logging.info("{user} said: {message}".format(user=message.author, message=message.content))
 
             if "$pokemon" == input_message[0]:
-                output_message = self._pokemon(query=" ".join(input_message[1:]))
-                await message.channel.send(output_message)
+                output_message, embed = self._pokemon(query=" ".join(input_message[1:]))
+                await message.channel.send(content=output_message, embed=embed)
             
             elif "$author" == input_message[0]:
                 await message.channel.send(self._author())
@@ -80,26 +80,21 @@ class Bot(discord.Client):
                 output_message = "Invalid command. For a list of commands, enter `$help`"
             
     def _pokemon(self, query):
-        cache_search = client.search_cache(query)
-        if cache_search:
-
-            name = cache_search["name"]
-            ptype = client.parse_types(cache_search["types"])
-            height = cache_search["height"]
-            weight = cache_search["weight"]
-
-            output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
-            return output
-        else:
+        pokemon = client.search_cache(query)
+        if not pokemon:
             pokemon = client.search_pokemon(query)
 
-            name = pokemon["name"]
-            ptype = client.parse_types(pokemon["types"])
-            height = pokemon["height"] / 10
-            weight = pokemon["weight"] / 10
+        name = pokemon["name"]
+        ptype = client.parse_types(pokemon["types"])
+        height = pokemon["height"] / 10
+        weight = pokemon["weight"] / 10
+        
+        image = pokemon.get("sprites", {}).get("front_default")
+        embed = discord.Embed()
+        embed.set_image(url=image)
 
-            output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} metres tall with a weight of {weight}kg"
-            return output
+        output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
+        return (output, embed)
 
     def _author(self):
         author = "**Author:** Tem Tamre\n"

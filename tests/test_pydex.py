@@ -36,6 +36,7 @@ class TestPydex(unittest.TestCase):
         pikachu = self.client.search_pokemon("pikachu")
         assert pikachu["name"] == "pikachu"
         assert pikachu["id"] == 25
+        assert pikachu["sprites"]
         assert self.client.search_cache("pikachu") == pikachu
 
     def test_invalid_search_pokemon(self):
@@ -52,6 +53,7 @@ class TestPydex(unittest.TestCase):
 
         assert pikachu["name"] == "pikachu"
         assert pikachu["id"] == 25
+        assert pikachu["sprites"]
         assert self.client.search_cache("pikachu") == pikachu
 
     def test_invalid_search_cache(self):
