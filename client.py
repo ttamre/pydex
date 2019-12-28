@@ -28,7 +28,7 @@ https://pokeapi.co/docs/v2.html
 import json
 import logging
 import requests
-
+from io import BytesIO
 logging.basicConfig(level=logging.INFO)
 
 
@@ -61,3 +61,15 @@ class Pydex:
         else:
             logging.error(f"(Ignore in workflow build) Parsing error on type {json.dumps(ptype)}")
             return None
+
+    def fetch_images(self, sprites):
+        if not sprites:
+            return None
+
+        front_default_repsonse = requests.get(sprites.get("front_default"))
+        front_default = BytesIO(front_default_repsonse.content)
+
+        front_shiny_response = requests.get(sprites.get("front_shiny"))
+        front_shiny = BytesIO(front_shiny_response.content)
+
+        return [front_default, front_shiny]

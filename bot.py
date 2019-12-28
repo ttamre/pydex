@@ -60,8 +60,8 @@ class Bot(discord.Client):
             logging.info("{user} said: {message}".format(user=message.author, message=message.content))
 
             if "$pokemon" == input_message[0]:
-                output_message, embed = self._pokemon(query=" ".join(input_message[1:]))
-                await message.channel.send(content=output_message, embed=embed)
+                output_message, images = self._pokemon(query=" ".join(input_message[1:]))
+                await message.channel.send(content=output_message, files=images)
             
             elif "$author" == input_message[0]:
                 await message.channel.send(self._author())
@@ -89,12 +89,12 @@ class Bot(discord.Client):
         height = pokemon["height"] / 10
         weight = pokemon["weight"] / 10
         
-        image = pokemon.get("sprites", {}).get("front_default")
-        embed = discord.Embed()
-        embed.set_image(url=image)
+        images = client.fetch_images(pokemon.get("sprites"))
+        if images:
+            images = [discord.File(fp=f) for f in images]
 
         output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
-        return (output, embed)
+        return (output, images)
 
     def _author(self):
         author = "**Author:** Tem Tamre\n"
