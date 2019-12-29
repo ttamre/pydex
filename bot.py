@@ -96,7 +96,7 @@ class Bot(discord.Client):
         if images:
             images = [discord.File(fp=f[1], filename=f"file{f[0]+1}.png") for f in enumerate(images)]
 
-        output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} units tall with a weight of {weight}"
+        output = f"**{name.title()}** is a **{ptype}** type pokemon, measuring at {height} metres tall with a weight of {weight}kg"
         return (output, images)
 
     def _author(self):
