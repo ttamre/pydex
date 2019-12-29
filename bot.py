@@ -80,9 +80,6 @@ class Bot(discord.Client):
                 output_message = "Invalid command. For a list of commands, enter `$help`"
             
     def _pokemon(self, query):
-        if query == "god":
-            return ("", [discord.File(fp=client.god(), filename="god.jpg")])
-
         pokemon = client.search_cache(query)
         if not pokemon:
             pokemon = client.search_pokemon(query)
@@ -110,5 +107,3 @@ class Bot(discord.Client):
         author = "To view author contact info, enter `$author`\n"
         exit_ = "To log the bot off, enter `$exit` (only owners of this bot can execute this command, contact the server owner or tei#0397 for assistance)"
         return pokemon + author + exit_
-
-    
