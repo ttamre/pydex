@@ -73,8 +73,3 @@ class Pydex:
         front_shiny = BytesIO(front_shiny_response.content)
 
         return [front_default, front_shiny]
-
-    def god(self):
-        response = requests.get("https://pbs.twimg.com/media/EEuV-M8XYAACOWS?format=jpg&name=medium")
-        god_bytes = BytesIO(response.content)
-        return god_bytes
